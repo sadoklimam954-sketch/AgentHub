@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentHub — Démarrer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0a0d0a;
+  --bg2:#0d120d;
+  --card:#121812;
+  --card2:#192019;
+  --border:rgba(180,255,160,0.07);
+  --border2:rgba(180,255,160,0.14);
+  --accent:#4ade80;
+  --accent2:#f97316;
+  --text:#f0fff4;
+  --muted:rgba(200,255,210,0.45);
+  --muted2:rgba(200,255,210,0.22);
+  --danger:#ff6b6b;
+}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+
+/* PAGES */
+.page{display:none;min-height:100vh;animation:pageIn 0.4s ease both;}
+.page.active{display:flex;}
+@keyframes pageIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* NAV */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2rem;
+  background:rgba(10,13,10,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:0.5px solid var(--border);
+}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;}
+.logo span{color:var(--accent);}
+.topbar-back{
+  display:flex;align-items:center;gap:6px;
+  font-size:0.82rem;color:var(--muted);
+  cursor:pointer;text-decoration:none;
+  transition:color 0.2s;
+  background:none;border:none;
+}
+.topbar-back:hover{color:var(--text);}
+
+/* STEPS BAR */
+.steps-bar{
+  display:flex;align-items:center;gap:0;
+  padding:0 2rem;
+}
+.step-item{
+  display:flex;align-items:center;gap:8px;
+  font-size:0.78rem;font-weight:500;
+  color:var(--muted2);
+  white-space:nowrap;
+}
+.step-item.active{color:var(--accent);}
+.step-item.done{color:var(--muted);}
+.step-dot{
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:700;
+  border:1.5px solid var(--muted2);
+  background:transparent;
+  transition:all 0.3s;
+}
+.step-item.active .step-dot{border-color:var(--accent);color:var(--accent);}
+.step-item.done .step-dot{border-color:var(--accent);background:var(--accent);color:#000;}
+.step-line{width:32px;height:1px;background:var(--border2);margin:0 4px;}
+.step-line.done{background:var(--accent);opacity:0.4;}
+
+/* LAYOUT */
+.page-wrap{
+  flex:1;
+  display:flex;flex-direction:column;
+  padding-top:70px;
+}
+.page-inner{
+  flex:1;
+  max-width:1000px;
+  width:100%;
+  margin:0 auto;
+  padding:3rem 2rem;
+}
+.page-inner.narrow{max-width:560px;}
+.page-inner.wide{max-width:1100px;}
+
+/* TYPOGRAPHY */
+.page-label{font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;}
+.page-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1.15;margin-bottom:0.5rem;}
+.page-sub{font-size:0.9rem;color:var(--muted);line-height:1.6;margin-bottom:2rem;}
+
+/* CARDS */
+.card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:1.75rem;}
+.card2{background:var(--card2);border:0.5px solid var(--border2);border-radius:12px;padding:1.25rem;}
+
+/* ======== PAGE 1 — PLAN ======== */
+#page-plan .plan-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.25rem;
+  margin-top:2rem;
+}
+.plan-card{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:16px;
+  padding:2rem 1.5rem;
+  cursor:pointer;
+  transition:all 0.25s;
+  display:flex;flex-direction:column;
+  position:relative;
+  overflow:hidden;
+}
+.plan-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--border2);transition:background 0.3s;}
+.plan-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.plan-card.selected{border-color:var(--accent);background:rgba(74,222,128,0.05);}
+.plan-card.selected::before{background:var(--accent);}
+.plan-card.popular-plan{border-color:rgba(74,222,128,0.25);}
+.plan-popular{
+  position:absolute;top:-1px;right:16px;
+  background:var(--accent);color:#000;
+  font-size:0.65rem;font-weight:700;
+  padding:3px 10px;border-radius:0 0 8px 8px;
+}
+.plan-name{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;}
+.plan-price{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:800;line-height:1;}
+.plan-price sub{font-size:0.9rem;font-weight:400;color:var(--muted);vertical-align:baseline;}
+.plan-period{font-size:0.78rem;color:var(--muted);margin-bottom:1rem;}
+.plan-desc{font-size:0.82rem;color:var(--muted);line-height:1.55;margin-bottom:1.25rem;flex:1;}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem;}
+.plan-features li{font-size:0.8rem;display:flex;align-items:center;gap:8px;}
+.pf-check{color:var(--accent);font-size:0.85rem;}
+.plan-select-btn{
+  padding:0.7rem;border-radius:8px;
+  font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;
+  cursor:pointer;transition:all 0.2s;
+  background:transparent;color:var(--text);
+  border:0.5px solid var(--border2);
+}
+.plan-card.selected .plan-select-btn{background:var(--accent);border-color:var(--accent);color:#000;}
+.plan-trial-note{text-align:center;font-size:0.78rem;color:var(--muted);margin-top:1.5rem;}
+.plan-trial-note span{color:var(--accent);}
+
+/* ======== PAGE 2 — SIGNUP ======== */
+#page-signup .signup-layout{
+  display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;
+}
+.form-group{margin-bottom:1.25rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+label{display:block;font-size:0.8rem;font-weight:500;color:var(--muted);margin-bottom:0.4rem;}
+input[type=text],input[type=email],input[type=password],input[type=tel],select{
+  width:100%;
+  background:var(--card2);
+  border:0.5px solid var(--border2);
+  border-radius:8px;
+  padding:0.7rem 0.9rem;
+  font-family:'Outfit',sans-serif;
+  font-size:0.88rem;
+  color:var(--text);
+  outline:none;
+  transition:border-color 0.2s;
+}
+input:focus,select:focus{border-color:rgba(74,222,128,0.4);}
+input::placeholder{color:var(--muted2);}
+select option{background:var(--card2);color:var(--text);}
+.form-hint{font-size:0.74rem;color:var(--muted2);margin-top:0.3rem;}
+.password-wrap{position:relative;}
+.pw-toggle{
+  position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;
+  font-size:0.8rem;color:var(--muted);
+}
+.signup-summary{
+  background:var(--card);
+  border:0.5px solid var(--border);
+  border-radius:14px;
+  padding:1.75rem;
+  position:sticky;top:90px;
+}
+.summary-plan-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:0.25rem;}
+.summary-price{font-size:0.85rem;color:var(--muted);}
+.summary-divider{border:none;border-top:0.5px solid var(--border);margin:1.25rem 0;}
+.summary-line{display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:0.6rem;}
+.summary-line.total{font-weight:600;font-size:0.92rem;color:var(--text);}
+.summary-line .val{color:var(--muted);}
+.summary-line.total .val{color:var(--accent);}
+.trial-badge{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(74,222,128,0.08);
+  border:0.5px solid rgba(74,222,128,0.2);
+  border-radius:8px;
+  padding:0.75rem;
+  font-size:0.8rem;color:var(--accent);
+  margin-top:1.25rem;
+}
+.guarantee{display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--muted);margin-top:0.75rem;}
+
+/* ======== PAGE 3 — PAYMENT ======== */
+#page-payment .pay-layout{
+  display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;
+}
+.card-field{
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;
+}
+.card-number-wrap{position:relative;}
+.card-number-wrap input{padding-right:3rem;}
+.card-brand{position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.9rem;}
+.security-badges{
+  display:flex;gap:1rem;margin-top:1.5rem;padding-top:1.25rem;
+  border-top:0.5px solid var(--border);
+}
+.sec-badge{display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--muted);}
+.order-summary{
+  background:var(--card);border:0.5px solid var(--border);
+  border-radius:14px;padding:1.75rem;position:sticky;top:90px;
+}
+.order-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:1.25rem;}
+.order-item{display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:0.75rem;}
+.order-item .item-name{color:var(--muted);}
+.order-total-box{
+  background:rgba(74,222,128,0.07);
+  border:0.5px solid rgba(74,222,128,0.18);
+  border-radius:10px;
+  padding:0.75rem 1rem;
+  display:flex;justify-content:space-between;
+  align-items:center;
+  margin-top:1rem;
+}
+.order-total-label{font-size:0.82rem;font-weight:600;}
+.order-total-amount{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;color:var(--accent);}
+.trial-info{font-size:0.75rem;color:var(--muted);margin-top:0.5rem;text-align:center;}
+
+/* ======== PAGE 4 — DASHBOARD ======== */
+#page-dashboard{flex-direction:column;}
+.dash-sidebar{
+  position:fixed;top:0;left:0;bottom:0;
+  width:220px;
+  background:var(--card);
+  border-right:0.5px solid var(--border);
+  padding:1.25rem 0;
+  display:flex;flex-direction:column;
+  z-index:50;
+}
+.dash-logo{padding:0.5rem 1.25rem 1.5rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;}
+.dash-logo span{color:var(--accent);}
+.dash-nav{list-style:none;flex:1;}
+.dash-nav li{padding:0;}
+.dash-nav a{
+  display:flex;align-items:center;gap:10px;
+  padding:0.65rem 1.25rem;
+  font-size:0.83rem;color:var(--muted);
+  text-decoration:none;
+  transition:all 0.2s;
+  cursor:pointer;
+  border-left:2px solid transparent;
+}
+.dash-nav a:hover{color:var(--text);background:rgba(255,255,255,0.03);}
+.dash-nav a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(74,222,128,0.06);}
+.dash-nav .nav-icon{font-size:0.95rem;width:18px;text-align:center;}
+.dash-user{
+  padding:1rem 1.25rem;
+  border-top:0.5px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.user-avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:700;color:#000;flex-shrink:0;
+}
+.user-name{font-size:0.78rem;font-weight:500;}
+.user-plan{font-size:0.68rem;color:var(--muted);}
+
+.dash-main{
+  margin-left:220px;
+  padding:2rem;
+  min-height:100vh;
+}
+.dash-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2rem;
+}
+.dash-topbar h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;}
+.dash-topbar-right{display:flex;align-items:center;gap:1rem;}
+.notif-btn{
+  width:36px;height:36px;border-radius:8px;
+  background:var(--card);border:0.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:0.9rem;
+}
+.add-agent-btn{
+  background:var(--accent);color:#000;
+  border:none;border-radius:8px;
+  padding:0.55rem 1rem;
+  font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;
+  cursor:pointer;
+}
+
+/* METRICS ROW */
+.metrics-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1rem;margin-bottom:1.75rem;
+}
+.metric-card{
+  background:var(--card);border:0.5px solid var(--border);
+  border-radius:12px;padding:1.25rem;
+}
+.metric-label{font-size:0.72rem;color:var(--muted);margin-bottom:0.5rem;}
+.metric-val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;}
+.metric-change{font-size:0.72rem;margin-top:0.35rem;}
+.metric-change.up{color:var(--accent);}
+.metric-change.down{color:var(--danger);}
+
+/* MAIN GRID */
+.dash-grid{display:grid;grid-template-columns:1fr 340px;gap:1.5rem;}
+
+/* AGENT LIST */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.section-head h2{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;}
+.agent-list{display:flex;flex-direction:column;gap:0.75rem;}
+.agent-item{
+  background:var(--card);border:0.5px solid var(--border);
+  border-radius:12px;padding:1rem 1.25rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.agent-color{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.agent-info{flex:1;}
+.agent-name{font-size:0.88rem;font-weight:500;margin-bottom:2px;}
+.agent-client{font-size:0.75rem;color:var(--muted);}
+.agent-stats{display:flex;gap:1.25rem;font-size:0.75rem;color:var(--muted);}
+.agent-stat strong{color:var(--text);font-weight:500;}
+.agent-status{
+  font-size:0.7rem;font-weight:600;
+  padding:3px 9px;border-radius:20px;
+}
+.status-online{background:rgba(74,222,128,0.12);color:var(--accent);}
+.status-setup{background:rgba(249,115,22,0.12);color:var(--accent2);}
+.agent-menu{
+  background:none;border:none;cursor:pointer;
+  font-size:1rem;color:var(--muted);padding:4px;
+}
+
+/* CONVERSATIONS */
+.conv-list{display:flex;flex-direction:column;gap:0;border-radius:12px;overflow:hidden;border:0.5px solid var(--border);}
+.conv-item{
+  background:var(--card);padding:0.9rem 1.1rem;
+  border-bottom:0.5px solid var(--border);
+  cursor:pointer;transition:background 0.2s;
+}
+.conv-item:last-child{border-bottom:none;}
+.conv-item:hover{background:var(--card2);}
+.conv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;}
+.conv-name{font-size:0.83rem;font-weight:500;}
+.conv-time{font-size:0.7rem;color:var(--muted2);}
+.conv-preview{font-size:0.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.conv-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:18px;height:18px;border-radius:9px;
+  background:var(--accent);color:#000;
+  font-size:0.65rem;font-weight:700;
+  padding:0 4px;
+}
+
+/* SETUP WIZARD */
+.setup-card{
+  background:var(--card);border:0.5px solid var(--border);
+  border-radius:12px;padding:1.25rem;margin-bottom:1rem;
+}
+.setup-progress{height:4px;background:var(--border);border-radius:2px;margin:1rem 0;}
+.setup-bar{height:100%;background:var(--accent);border-radius:2px;width:25%;transition:width 0.5s ease;}
+.setup-steps{display:flex;flex-direction:column;gap:0.6rem;}
+.setup-step{
+  display:flex;align-items:center;gap:10px;
+  font-size:0.8rem;padding:0.5rem 0;
+  border-bottom:0.5px solid var(--border);
+}
+.setup-step:last-child{border-bottom:none;}
+.setup-check{
+  width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;flex-shrink:0;
+}
+.check-done{background:var(--accent);color:#000;}
+.check-todo{border:1.5px solid var(--border2);background:transparent;}
+.setup-step-label{flex:1;color:var(--muted);}
+.setup-step.done-step .setup-step-label{color:var(--text);}
+.setup-btn{
+  width:100%;margin-top:0.75rem;padding:0.65rem;
+  background:var(--accent);border:none;border-radius:8px;
+  font-family:'Outfit',sans-serif;font-size:0.82rem;font-weight:600;
+  color:#000;cursor:pointer;
+}
+
+/* CHART PLACEHOLDER */
+.chart-area{
+  background:var(--card);border:0.5px solid var(--border);
+  border-radius:12px;padding:1.25rem;
+  margin-bottom:1.5rem;
+}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.chart-header h3{font-size:0.88rem;font-weight:600;}
+.chart-tabs{display:flex;gap:4px;}
+.chart-tab{
+  font-size:0.72rem;padding:3px 10px;border-radius:6px;
+  background:transparent;border:0.5px solid var(--border2);
+  color:var(--muted);cursor:pointer;
+}
+.chart-tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:600;}
+.chart-bars{
+  display:flex;align-items:flex-end;gap:6px;
+  height:100px;padding-top:1rem;
+}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.bar-fill{
+  width:100%;border-radius:4px 4px 0 0;
+  background:rgba(74,222,128,0.25);
+  transition:height 0.4s ease;
+  position:relative;
+}
+.bar-fill.active-bar{background:var(--accent);}
+.bar-label{font-size:0.62rem;color:var(--muted2);}
+
+/* BUTTONS */
+.btn{
+  padding:0.75rem 1.5rem;border-radius:8px;
+  font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:600;
+  cursor:pointer;transition:all 0.2s;border:none;
+}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px);}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.btn-ghost{background:transparent;color:var(--text);border:0.5px solid var(--border2);}
+.btn-ghost:hover{background:rgba(255,255,255,0.04);}
+.btn-full{width:100%;}
+
+/* LOADING */
+.btn-loading{position:relative;color:transparent !important;}
+.btn-loading::after{
+  content:'';
+  position:absolute;top:50%;left:50%;
+  width:16px;height:16px;
+  border:2px solid rgba(0,0,0,0.3);
+  border-top-color:#000;
+  border-radius:50%;
+  animation:spin 0.6s linear infinite;
+  transform:translate(-50%,-50%);
+}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+
+/* SUCCESS */
+.success-wrap{
+  text-align:center;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  min-height:60vh;
+  gap:1rem;
+}
+.success-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(74,222,128,0.12);
+  border:1.5px solid rgba(74,222,128,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+  animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+@keyframes popIn{from{transform:scale(0);}to{transform:scale(1);}}
+.success-wrap h2{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;}
+.success-wrap p{color:var(--muted);font-size:0.9rem;max-width:380px;}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:2rem;right:2rem;
+  background:var(--card2);border:0.5px solid var(--border2);
+  border-radius:10px;padding:0.75rem 1.25rem;
+  font-size:0.83rem;display:flex;align-items:center;gap:8px;
+  transform:translateY(80px);opacity:0;
+  transition:all 0.3s ease;z-index:9999;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .plan-grid{grid-template-columns:1fr !important;}
+  .signup-layout,.pay-layout{grid-template-columns:1fr !important;}
+  .dash-sidebar{display:none;}
+  .dash-main{margin-left:0;padding:1.25rem;}
+  .metrics-row{grid-template-columns:1fr 1fr;}
+  .dash-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr !important;}
+  .topbar{padding:0.85rem 1rem;}
+  .page-inner{padding:2rem 1rem;}
+  .page-inner.narrow,.page-inner.wide{padding:2rem 1rem;}
+  .security-badges{flex-wrap:wrap;gap:0.5rem;}
+  .steps-bar .step-item span:not(.step-dot){display:none;}
+  .steps-bar .step-line{width:16px;}
+  .steps-bar{gap:0;}
+  .signup-summary,.order-summary{position:static;}
+}
+@media(max-width:480px){
+  .topbar{padding:0.75rem 0.875rem;}
+  .metrics-row{grid-template-columns:1fr 1fr;}
+  .page-title{font-size:1.6rem;}
+  .plan-card{padding:1.5rem 1.25rem;}
+  .plan-price{font-size:1.8rem;}
+  .dash-topbar h1{font-size:1.2rem;}
+  .dash-main{padding:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-dot"></span><span id="toast-msg"></span></div>
+
+<!-- ===================== PAGE 1 : PLAN ===================== -->
+<div class="page active" id="page-plan">
+  <div class="page-wrap">
+    <div class="topbar">
+      <a class="topbar-back" href="agent-support-whitelabel.html">← Retour à l'accueil</a>
+      <div class="logo">Agent<span>Hub</span></div>
+      <div class="steps-bar">
+        <div class="step-item active"><div class="step-dot">1</div><span>Plan</span></div>
+        <div class="step-line"></div>
+        <div class="step-item"><div class="step-dot">2</div><span>Compte</span></div>
+        <div class="step-line"></div>
+        <div class="step-item"><div class="step-dot">3</div><span>Paiement</span></div>
+        <div class="step-line"></div>
+        <div class="step-item"><div class="step-dot">4</div><span>Dashboard</span></div>
+      </div>
+    </div>
+
+    <div class="page-inner wide" style="padding-top:5rem;">
+      <div class="page-label">Étape 1 / 3</div>
+      <h1 class="page-title">Choisissez votre plan</h1>
+      <p class="page-sub">14 jours d'essai gratuit sur tous les plans. Aucune carte bancaire requise pour commencer.</p>
+
+      <div class="plan-grid" id="plan-grid">
+        <!-- STARTER -->
+        <div class="plan-card" onclick="selectPlan(this,'Starter','49')">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">49<sub>€</sub></div>
+          <div class="plan-period">/mois par agence</div>
+          <p class="plan-desc">Pour les petites agences qui démarrent avec l'IA support.</p>
+          <ul class="plan-features">
+            <li><span class="pf-check">✓</span> 1 agent IA personnalisé</li>
+            <li><span class="pf-check">✓</span> 500 conversations/mois</li>
+            <li><span class="pf-check">✓</span> Branding basique</li>
+            <li><span class="pf-check">✓</span> Widget embed</li>
+            <li><span class="pf-check">✓</span> Support email</li>
+          </ul>
+          <button class="plan-select-btn">Choisir Starter</button>
+        </div>
+
+        <!-- PRO -->
+        <div class="plan-card popular-plan" onclick="selectPlan(this,'Pro','99')">
+          <div class="plan-popular">⭐ Plus populaire</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">99<sub>€</sub></div>
+          <div class="plan-period">/mois par agence</div>
+          <p class="plan-desc">Pour les agences actives qui veulent un support enterprise.</p>
+          <ul class="plan-features">
+            <li><span class="pf-check">✓</span> 3 agents IA</li>
+            <li><span class="pf-check">✓</span> 2 000 conversations/mois</li>
+            <li><span class="pf-check">✓</span> White-label complet</li>
+            <li><span class="pf-check">✓</span> Analytics avancées</li>
+            <li><span class="pf-check">✓</span> Escalade + Slack</li>
+            <li><span class="pf-check">✓</span> Multi-langues</li>
+          </ul>
+          <button class="plan-select-btn">Choisir Pro</button>
+        </div>
+
+        <!-- AGENCE+ -->
+        <div class="plan-card" onclick="selectPlan(this,'Agence+','199')">
+          <div class="plan-name">Agence+</div>
+          <div class="plan-price">199<sub>€</sub></div>
+          <div class="plan-period">/mois par agence</div>
+          <p class="plan-desc">Pour les grandes agences avec plusieurs clients et volumes élevés.</p>
+          <ul class="plan-features">
+            <li><span class="pf-check">✓</span> Agents illimités</li>
+            <li><span class="pf-check">✓</span> 5 000 conversations/mois</li>
+            <li><span class="pf-check">✓</span> Domaine personnalisé</li>
+            <li><span class="pf-check">✓</span> Accès API complet</li>
+            <li><span class="pf-check">✓</span> SLA prioritaire</li>
+            <li><span class="pf-check">✓</span> Onboarding dédié</li>
+          </ul>
+          <button class="plan-select-btn">Choisir Agence+</button>
+        </div>
+      </div>
+
+      <p class="plan-trial-note">🔒 Essai gratuit 14 jours · <span>Annulation à tout moment</span> · Aucun frais caché</p>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:2rem;">
+        <button class="btn btn-primary" id="plan-next-btn" onclick="goToSignup()" disabled>
+          Continuer → Créer mon compte
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE 2 : SIGNUP ===================== -->
+<div class="page" id="page-signup">
+  <div class="page-wrap">
+    <div class="topbar">
+      <button class="topbar-back" onclick="goTo('page-plan',2)">← Retour</button>
+      <div class="logo">Agent<span>Hub</span></div>
+      <div class="steps-bar">
+        <div class="step-item done"><div class="step-dot">✓</div><span>Plan</span></div>
+        <div class="step-line done"></div>
+        <div class="step-item active"><div class="step-dot">2</div><span>Compte</span></div>
+        <div class="step-line"></div>
+        <div class="step-item"><div class="step-dot">3</div><span>Paiement</span></div>
+        <div class="step-line"></div>
+        <div class="step-item"><div class="step-dot">4</div><span>Dashboard</span></div>
+      </div>
+    </div>
+
+    <div class="page-inner" style="max-width:900px;padding-top:5rem;">
+      <div class="page-label">Étape 2 / 3</div>
+      <h1 class="page-title">Créer votre compte</h1>
+      <p class="page-sub">Votre espace AgentHub prêt en 2 minutes.</p>
+
+      <div class="signup-layout">
+        <!-- FORM -->
+        <div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Prénom</label>
+              <input type="text" id="prenom" placeholder="Thomas" oninput="validateSignup()">
+            </div>
+            <div class="form-group">
+              <label>Nom</label>
+              <input type="text" id="nom" placeholder="Dupont" oninput="validateSignup()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email professionnel</label>
+            <input type="email" id="email" placeholder="thomas@agence.fr" oninput="validateSignup()">
+          </div>
+          <div class="form-group">
+            <label>Nom de votre agence</label>
+            <input type="text" id="agence" placeholder="Agence Pixel" oninput="validateSignup()">
+          </div>
+          <div class="form-group">
+            <label>Site web de l'agence</label>
+            <input type="text" id="website" placeholder="https://agence-pixel.fr">
+          </div>
+          <div class="form-group">
+            <label>Nombre de clients que vous gérez</label>
+            <select id="nbclients" onchange="validateSignup()">
+              <option value="">Sélectionner...</option>
+              <option value="1-5">1 à 5 clients</option>
+              <option value="6-15">6 à 15 clients</option>
+              <option value="16-30">16 à 30 clients</option>
+              <option value="30+">Plus de 30 clients</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <div class="password-wrap">
+              <input type="password" id="password" placeholder="Min. 8 caractères" oninput="validateSignup()">
+              <button class="pw-toggle" onclick="togglePw()" type="button" id="pw-btn">👁</button>
+            </div>
+            <div class="form-hint">Minimum 8 caractères, une majuscule, un chiffre</div>
+          </div>
+
+          <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+            <button class="btn btn-ghost" onclick="goTo('page-plan',1)">← Retour</button>
+            <button class="btn btn-primary" id="signup-btn" style="flex:1;" onclick="goToPayment()" disabled>
+              Continuer → Paiement
+            </button>
+          </div>
+
+          <p style="font-size:0.73rem;color:var(--muted2);margin-top:1rem;text-align:center;">
+            En créant un compte, vous acceptez nos <a href="#" style="color:var(--muted);">CGU</a> et notre <a href="#" style="color:var(--muted);">Politique de confidentialité</a>
+          </p>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="signup-summary">
+          <div class="page-label">Votre sélection</div>
+          <div class="summary-plan-name" id="sum-plan-name">Plan Pro</div>
+          <div class="summary-price" id="sum-plan-price">99€/mois par agence</div>
+          <hr class="summary-divider">
+          <div class="summary-line"><span>Essai gratuit</span><span class="val">14 jours</span></div>
+          <div class="summary-line"><span>1er prélèvement</span><span class="val" id="sum-date">—</span></div>
+          <div class="summary-line"><span>Résiliation</span><span class="val">À tout moment</span></div>
+          <hr class="summary-divider">
+          <div class="summary-line total"><span>Total aujourd'hui</span><span class="val">0€</span></div>
+          <div class="trial-badge">🎁 14 jours gratuits inclus — aucun débit maintenant</div>
+          <div class="guarantee">🔒 Paiement sécurisé Stripe · SSL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE 3 : PAYMENT ===================== -->
+<div class="page" id="page-payment">
+  <div class="page-wrap">
+    <div class="topbar">
+      <button class="topbar-back" onclick="goTo('page-signup',2)">← Retour</button>
+      <div class="logo">Agent<span>Hub</span></div>
+      <div class="steps-bar">
+        <div class="step-item done"><div class="step-dot">✓</div><span>Plan</span></div>
+        <div class="step-line done"></div>
+        <div class="step-item done"><div class="step-dot">✓</div><span>Compte</span></div>
+        <div class="step-line done"></div>
+        <div class="step-item active"><div class="step-dot">3</div><span>Paiement</span></div>
+        <div class="step-line"></div>
+        <div class="step-item"><div class="step-dot">4</div><span>Dashboard</span></div>
+      </div>
+    </div>
+
+    <div class="page-inner" style="max-width:900px;padding-top:5rem;">
+      <div class="page-label">Étape 3 / 3</div>
+      <h1 class="page-title">Informations de paiement</h1>
+      <p class="page-sub">Votre carte ne sera débitée qu'après la fin de votre essai gratuit de 14 jours.</p>
+
+      <div class="pay-layout">
+        <!-- PAYMENT FORM -->
+        <div>
+          <div class="card" style="margin-bottom:1.25rem;">
+            <div style="font-size:0.8rem;font-weight:600;margin-bottom:1.25rem;display:flex;align-items:center;gap:8px;">
+              💳 <span>Carte bancaire</span>
+              <span style="margin-left:auto;display:flex;gap:6px;font-size:1.1rem;">🟦🟧⬛</span>
+            </div>
+            <div class="form-group">
+              <label>Numéro de carte</label>
+              <div class="card-number-wrap">
+                <input type="text" id="card-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this);validatePayment()">
+                <span class="card-brand" id="card-brand">💳</span>
+              </div>
+            </div>
+            <div class="card-field">
+              <div class="form-group">
+                <label>Date d'expiration</label>
+                <input type="text" id="card-exp" placeholder="MM/AA" maxlength="5" oninput="formatExp(this);validatePayment()">
+              </div>
+              <div class="form-group">
+                <label>CVV</label>
+                <input type="text" id="card-cvv" placeholder="123" maxlength="3" oninput="validatePayment()">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Nom sur la carte</label>
+              <input type="text" id="card-name" placeholder="THOMAS DUPONT" oninput="validatePayment()" style="text-transform:uppercase;">
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:1.25rem;">
+            <div style="font-size:0.8rem;font-weight:600;margin-bottom:1rem;">🏢 Adresse de facturation</div>
+            <div class="form-group">
+              <label>Pays</label>
+              <select id="pay-country" onchange="validatePayment()">
+                <option value="">Sélectionner...</option>
+                <option value="FR" selected>🇫🇷 France</option>
+                <option value="BE">🇧🇪 Belgique</option>
+                <option value="CH">🇨🇭 Suisse</option>
+                <option value="LU">🇱🇺 Luxembourg</option>
+                <option value="TN">🇹🇳 Tunisie</option>
+                <option value="MA">🇲🇦 Maroc</option>
+                <option value="DZ">🇩🇿 Algérie</option>
+                <option value="other">Autre...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Numéro de TVA (optionnel)</label>
+              <input type="text" placeholder="FR 12 345678901">
+              <div class="form-hint">Entreprises : la TVA sera déduite automatiquement</div>
+            </div>
+          </div>
+
+          <div class="security-badges">
+            <div class="sec-badge">🔒 Chiffrement SSL 256-bit</div>
+            <div class="sec-badge">🛡 Stripe Secure</div>
+            <div class="sec-badge">✓ RGPD conforme</div>
+          </div>
+
+          <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+            <button class="btn btn-ghost" onclick="goTo('page-signup',2)">← Retour</button>
+            <button class="btn btn-primary" id="pay-btn" style="flex:1;" onclick="processPayment()" disabled>
+              Démarrer l'essai gratuit →
+            </button>
+          </div>
+          <p style="font-size:0.73rem;color:var(--muted2);margin-top:0.75rem;text-align:center;">
+            Aucun débit aujourd'hui. Premier prélèvement : <span id="pay-date-note" style="color:var(--muted);">—</span>
+          </p>
+        </div>
+
+        <!-- ORDER SUMMARY -->
+        <div class="order-summary">
+          <div class="order-title">Récapitulatif</div>
+          <div class="order-item">
+            <span class="item-name">Plan <span id="ord-plan">Pro</span></span>
+            <span id="ord-price">99€/mois</span>
+          </div>
+          <div class="order-item">
+            <span class="item-name">Essai gratuit 14 jours</span>
+            <span style="color:var(--accent);">-99€</span>
+          </div>
+          <div class="order-total-box">
+            <span class="order-total-label">Total aujourd'hui</span>
+            <span class="order-total-amount">0€</span>
+          </div>
+          <p class="trial-info">Puis <span id="ord-then">99€/mois</span> à partir du <span id="ord-date">—</span></p>
+
+          <hr style="border:none;border-top:0.5px solid var(--border);margin:1.25rem 0;">
+
+          <div style="font-size:0.78rem;color:var(--muted);">
+            <div style="margin-bottom:0.5rem;">✓ Accès complet dès maintenant</div>
+            <div style="margin-bottom:0.5rem;">✓ Annulation en 1 clic</div>
+            <div style="margin-bottom:0.5rem;">✓ Support prioritaire inclus</div>
+            <div>✓ Données hébergées en Europe</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE 4 : DASHBOARD ===================== -->
+<div class="page" id="page-dashboard">
+  <!-- SIDEBAR -->
+  <div class="dash-sidebar">
+    <div class="dash-logo">Agent<span>Hub</span></div>
+    <ul class="dash-nav">
+      <li><a class="active" onclick="setDashTab(this)"><span class="nav-icon">📊</span> Dashboard</a></li>
+      <li><a onclick="setDashTab(this)"><span class="nav-icon">🤖</span> Mes agents</a></li>
+      <li><a onclick="setDashTab(this)"><span class="nav-icon">💬</span> Conversations</a></li>
+      <li><a onclick="setDashTab(this)"><span class="nav-icon">📁</span> Documents</a></li>
+      <li><a onclick="setDashTab(this)"><span class="nav-icon">📈</span> Analytics</a></li>
+      <li><a onclick="setDashTab(this)"><span class="nav-icon">🎨</span> Branding</a></li>
+      <li><a onclick="setDashTab(this)"><span class="nav-icon">⚙️</span> Paramètres</a></li>
+    </ul>
+    <div class="dash-user">
+      <div class="user-avatar" id="dash-avatar">T</div>
+      <div>
+        <div class="user-name" id="dash-username">Thomas D.</div>
+        <div class="user-plan" id="dash-userplan">Plan Pro · Essai</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="dash-main">
+    <div class="dash-topbar">
+      <div>
+        <h1>Bonjour, <span id="dash-greeting">Thomas</span> 👋</h1>
+        <p style="font-size:0.8rem;color:var(--muted);margin-top:2px;">Essai gratuit — <span id="dash-days">14 jours restants</span></p>
+      </div>
+      <div class="dash-topbar-right">
+        <div class="notif-btn">🔔</div>
+        <button class="add-agent-btn" onclick="showToast('Création d\'agent — bientôt disponible !')">+ Nouvel agent</button>
+      </div>
+    </div>
+
+    <!-- SETUP WIZARD (first visit) -->
+    <div class="setup-card" id="setup-wizard">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+        <div>
+          <div style="font-size:0.8rem;font-weight:600;">🚀 Démarrage rapide</div>
+          <div style="font-size:0.74rem;color:var(--muted);margin-top:2px;">Complétez ces étapes pour activer votre premier agent</div>
+        </div>
+        <div style="font-size:0.75rem;color:var(--accent);">1 / 4 complété</div>
+      </div>
+      <div class="setup-progress"><div class="setup-bar" id="setup-bar"></div></div>
+      <div class="setup-steps">
+        <div class="setup-step done-step">
+          <div class="setup-check check-done">✓</div>
+          <span class="setup-step-label">Compte créé et plan sélectionné</span>
+          <span style="font-size:0.7rem;color:var(--accent);">Fait</span>
+        </div>
+        <div class="setup-step" id="step-docs">
+          <div class="setup-check check-todo"></div>
+          <span class="setup-step-label">Importer vos documents (FAQ, doc produit)</span>
+          <button style="font-size:0.72rem;color:var(--accent2);background:none;border:none;cursor:pointer;" onclick="showToast('Import de documents — simulation activée !')">Démarrer →</button>
+        </div>
+        <div class="setup-step" id="step-brand">
+          <div class="setup-check check-todo"></div>
+          <span class="setup-step-label">Personnaliser le branding de votre agent</span>
+          <button style="font-size:0.72rem;color:var(--muted2);background:none;border:none;cursor:pointer;">En attente</button>
+        </div>
+        <div class="setup-step" id="step-deploy">
+          <div class="setup-check check-todo"></div>
+          <span class="setup-step-label">Déployer le widget sur votre site client</span>
+          <button style="font-size:0.72rem;color:var(--muted2);background:none;border:none;cursor:pointer;">En attente</button>
+        </div>
+      </div>
+      <button class="setup-btn" onclick="completeStep()">Continuer l'installation →</button>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-label">Conversations ce mois</div>
+        <div class="metric-val" style="color:var(--accent);" id="m-conv">0</div>
+        <div class="metric-change up">↑ Démarrage</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Taux de résolution IA</div>
+        <div class="metric-val" id="m-res">—</div>
+        <div class="metric-change" style="color:var(--muted);">Données insuffisantes</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Agents actifs</div>
+        <div class="metric-val" id="m-agents">0</div>
+        <div class="metric-change" style="color:var(--muted);">Sur 3 disponibles</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Satisfaction client</div>
+        <div class="metric-val" id="m-sat">—</div>
+        <div class="metric-change" style="color:var(--muted);">En attente de données</div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div>
+        <!-- CHART -->
+        <div class="chart-area">
+          <div class="chart-header">
+            <h3>Conversations / jour</h3>
+            <div class="chart-tabs">
+              <button class="chart-tab active" onclick="setChartTab(this,'7j')">7j</button>
+              <button class="chart-tab" onclick="setChartTab(this,'30j')">30j</button>
+              <button class="chart-tab" onclick="setChartTab(this,'90j')">90j</button>
+            </div>
+          </div>
+          <div class="chart-bars" id="chart-bars">
+            <!-- generated by JS -->
+          </div>
+        </div>
+
+        <!-- AGENTS -->
+        <div class="section-head">
+          <h2>Vos agents</h2>
+          <button style="font-size:0.78rem;color:var(--accent);background:none;border:none;cursor:pointer;" onclick="showToast('Gestion des agents disponible après configuration')">Voir tout →</button>
+        </div>
+        <div class="agent-list">
+          <div class="agent-item">
+            <div class="agent-color" style="background:rgba(74,222,128,0.12);">🤖</div>
+            <div class="agent-info">
+              <div class="agent-name" id="agent1-name">Agent — Agence Pixel</div>
+              <div class="agent-client">agence-pixel.fr · Widget non déployé</div>
+            </div>
+            <div class="agent-stats">
+              <div><strong>0</strong> conv.</div>
+              <div><strong>—</strong> résolution</div>
+            </div>
+            <span class="agent-status status-setup">Configuration</span>
+            <button class="agent-menu" onclick="showToast('Menu agent — bientôt disponible')">⋯</button>
+          </div>
+          <div class="agent-item" style="opacity:0.4;">
+            <div class="agent-color" style="background:rgba(249,115,22,0.1);">➕</div>
+            <div class="agent-info">
+              <div class="agent-name">Ajouter un agent</div>
+              <div class="agent-client">Pour un nouveau client agence</div>
+            </div>
+            <button class="agent-menu" style="color:var(--accent);" onclick="showToast('Créez votre 1er agent d\'abord !')">+ Créer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div>
+        <!-- CONVERSATIONS -->
+        <div class="section-head">
+          <h2>Dernières conversations</h2>
+        </div>
+        <div class="conv-list" style="margin-bottom:1.5rem;">
+          <div class="conv-item">
+            <div class="conv-top">
+              <span class="conv-name" style="color:var(--muted2);">Aucune conversation</span>
+              <span class="conv-time">—</span>
+            </div>
+            <div class="conv-preview" style="color:var(--muted2);">Déployez votre agent pour voir les conversations ici</div>
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="section-head"><h2>Actions rapides</h2></div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;">
+          <button onclick="showToast('Import de documents ouvert !')" style="display:flex;align-items:center;gap:10px;background:var(--card);border:0.5px solid var(--border);border-radius:10px;padding:0.85rem;cursor:pointer;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.83rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:1rem;">📁</span>
+            <span>Importer des documents</span>
+            <span style="margin-left:auto;color:var(--muted);">→</span>
+          </button>
+          <button onclick="showToast('Éditeur de branding bientôt disponible !')" style="display:flex;align-items:center;gap:10px;background:var(--card);border:0.5px solid var(--border);border-radius:10px;padding:0.85rem;cursor:pointer;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.83rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:1rem;">🎨</span>
+            <span>Personnaliser le branding</span>
+            <span style="margin-left:auto;color:var(--muted);">→</span>
+          </button>
+          <button onclick="showToast('Code du widget copié !')" style="display:flex;align-items:center;gap:10px;background:var(--card);border:0.5px solid var(--border);border-radius:10px;padding:0.85rem;cursor:pointer;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.83rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:1rem;">🔗</span>
+            <span>Obtenir le code d'intégration</span>
+            <span style="margin-left:auto;color:var(--muted);">→</span>
+          </button>
+          <button onclick="showToast('Invitation envoyée !')" style="display:flex;align-items:center;gap:10px;background:var(--card);border:0.5px solid var(--border);border-radius:10px;padding:0.85rem;cursor:pointer;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.83rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:1rem;">📧</span>
+            <span>Inviter un membre de l'équipe</span>
+            <span style="margin-left:auto;color:var(--muted);">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- STATE ----
+const state = {plan:'', price:'', prenom:'', agence:''};
+
+// ---- PLAN SELECTION ----
+function selectPlan(card, name, price){
+  document.querySelectorAll('.plan-card').forEach(c=>{
+    c.classList.remove('selected');
+    c.querySelector('.plan-select-btn').textContent = 'Choisir '+c.querySelector('.plan-name').textContent;
+  });
+  card.classList.add('selected');
+  card.querySelector('.plan-select-btn').textContent = '✓ Sélectionné';
+  state.plan = name; state.price = price;
+  document.getElementById('plan-next-btn').disabled = false;
+}
+
+// ---- GOTO ----
+function goTo(pageId, stepNum){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const p = document.getElementById(pageId);
+  p.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goToSignup(){
+  // Update summary
+  document.getElementById('sum-plan-name').textContent = 'Plan '+state.plan;
+  document.getElementById('sum-plan-price').textContent = state.price+'€/mois par agence';
+  const d = new Date(); d.setDate(d.getDate()+14);
+  const fmt = d.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+  document.getElementById('sum-date').textContent = fmt;
+  document.getElementById('pay-date-note').textContent = fmt;
+  document.getElementById('ord-date').textContent = fmt;
+  document.getElementById('ord-plan').textContent = state.plan;
+  document.getElementById('ord-price').textContent = state.price+'€/mois';
+  document.getElementById('ord-then').textContent = state.price+'€/mois';
+  goTo('page-signup',2);
+}
+
+function goToPayment(){
+  state.prenom = document.getElementById('prenom').value;
+  state.agence = document.getElementById('agence').value;
+  goTo('page-payment',3);
+}
+
+function goToDashboard(){
+  // Populate dashboard with user data
+  const initials = (state.prenom||'T').charAt(0).toUpperCase();
+  document.getElementById('dash-avatar').textContent = initials;
+  document.getElementById('dash-greeting').textContent = state.prenom||'Thomas';
+  document.getElementById('dash-username').textContent = (state.prenom||'Thomas')+' D.';
+  document.getElementById('dash-userplan').textContent = 'Plan '+state.plan+' · Essai 14j';
+  document.getElementById('agent1-name').textContent = 'Agent — '+(state.agence||'Votre Agence');
+  buildChart([0,0,0,0,0,0,0]);
+  goTo('page-dashboard',4);
+}
+
+// ---- VALIDATE SIGNUP ----
+function validateSignup(){
+  const ok = document.getElementById('prenom').value.length>1
+    && document.getElementById('nom').value.length>1
+    && document.getElementById('email').value.includes('@')
+    && document.getElementById('agence').value.length>1
+    && document.getElementById('nbclients').value
+    && document.getElementById('password').value.length>=8;
+  document.getElementById('signup-btn').disabled = !ok;
+}
+
+// ---- VALIDATE PAYMENT ----
+function validatePayment(){
+  const num = document.getElementById('card-num').value.replace(/\s/g,'');
+  const exp = document.getElementById('card-exp').value;
+  const cvv = document.getElementById('card-cvv').value;
+  const name = document.getElementById('card-name').value;
+  const country = document.getElementById('pay-country').value;
+  const ok = num.length===16 && exp.length===5 && cvv.length===3 && name.length>2 && country;
+  document.getElementById('pay-btn').disabled = !ok;
+}
+
+// ---- FORMAT CARD ----
+function formatCard(el){
+  let v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+  const brand = document.getElementById('card-brand');
+  if(v.startsWith('4')) brand.textContent='🟦';
+  else if(v.startsWith('5')) brand.textContent='🟧';
+  else if(v.startsWith('3')) brand.textContent='⬛';
+  else brand.textContent='💳';
+}
+function formatExp(el){
+  let v = el.value.replace(/\D/g,'');
+  if(v.length>=2) v = v.substring(0,2)+'/'+v.substring(2,4);
+  el.value = v;
+}
+
+// ---- TOGGLE PW ----
+function togglePw(){
+  const i = document.getElementById('password');
+  const b = document.getElementById('pw-btn');
+  i.type = i.type==='password' ? 'text' : 'password';
+  b.textContent = i.type==='password' ? '👁' : '🙈';
+}
+
+// ---- PROCESS PAYMENT ----
+function processPayment(){
+  const btn = document.getElementById('pay-btn');
+  btn.classList.add('btn-loading');
+  btn.disabled = true;
+  setTimeout(()=>{
+    btn.classList.remove('btn-loading');
+    showToast('Compte créé avec succès ! Bienvenue 🎉');
+    setTimeout(goToDashboard, 800);
+  }, 2200);
+}
+
+// ---- CHART ----
+const days7 = ['L','M','M','J','V','S','D'];
+const days30 = ['S1','S2','S3','S4'];
+function buildChart(data){
+  const bars = document.getElementById('chart-bars');
+  const labels = days7.slice(-data.length);
+  const max = Math.max(...data,1);
+  bars.innerHTML = data.map((v,i)=>`
+    <div class="bar-col">
+      <div class="bar-fill${i===data.length-1?' active-bar':''}" style="height:${Math.max(4,(v/max)*80)}px;"></div>
+      <div class="bar-label">${labels[i]||''}</div>
+    </div>`).join('');
+}
+function setChartTab(el,period){
+  document.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  buildChart(period==='7j'?[0,0,0,0,0,0,0]:period==='30j'?[0,0,0,0]:[0,0,0,0,0,0,0,0,0,0,0,0]);
+}
+
+// ---- SETUP WIZARD ----
+let setupStep = 1;
+function completeStep(){
+  setupStep++;
+  const steps = ['step-docs','step-brand','step-deploy'];
+  const labels = ['Import documents','Branding','Déploiement'];
+  if(setupStep<=3){
+    const s = document.getElementById(steps[setupStep-2]);
+    if(s){
+      s.classList.add('done-step');
+      s.querySelector('.setup-check').classList.remove('check-todo');
+      s.querySelector('.setup-check').classList.add('check-done');
+      s.querySelector('.setup-check').textContent='✓';
+    }
+    document.getElementById('setup-bar').style.width = (setupStep/4*100)+'%';
+    document.querySelector('#setup-wizard [style*="1 / 4"]').textContent = setupStep+' / 4 complété'+(setupStep>1?'s':'');
+    showToast('Étape "'+labels[setupStep-2]+'" complétée !');
+  } else {
+    document.getElementById('setup-wizard').style.display='none';
+    document.getElementById('m-agents').textContent = '1';
+    showToast('🎉 Agent activé ! Premier déploiement réussi.');
+  }
+}
+
+// ---- DASH NAV ----
+function setDashTab(el){
+  document.querySelectorAll('.dash-nav a').forEach(a=>a.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ---- TOAST ----
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ---- INIT ----
+buildChart([0,0,0,0,0,0,0]);
+</script>
+</body>
+</html>
