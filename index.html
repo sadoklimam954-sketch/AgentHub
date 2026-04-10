@@ -103,7 +103,7 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
 /* ======== PAGE 1 — PLAN ======== */
 #page-plan .plan-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(4,1fr);
   gap:1.25rem;
   margin-top:2rem;
 }
@@ -543,6 +543,21 @@ select option{background:var(--card2);color:var(--text);}
       <p class="page-sub">14 jours d'essai gratuit sur tous les plans. Aucune carte bancaire requise pour commencer.</p>
 
       <div class="plan-grid" id="plan-grid">
+        <!-- SOLO -->
+        <div class="plan-card" onclick="selectPlan(this,'Solo','3')">
+          <div class="plan-name">Solo</div>
+          <div class="plan-price">3<sub>€</sub></div>
+          <div class="plan-period">/mois par agence</div>
+          <p class="plan-desc">Pour tester l'IA support à moindre coût avant de passer à l'échelle.</p>
+          <ul class="plan-features">
+            <li><span class="pf-check">✓</span> 1 agent IA</li>
+            <li><span class="pf-check">✓</span> 100 conversations/mois</li>
+            <li><span class="pf-check">✓</span> Widget embed</li>
+            <li><span class="pf-check">✓</span> Support communauté</li>
+          </ul>
+          <button class="plan-select-btn">Choisir Solo</button>
+        </div>
+
         <!-- STARTER -->
         <div class="plan-card" onclick="selectPlan(this,'Starter','49')">
           <div class="plan-name">Starter</div>

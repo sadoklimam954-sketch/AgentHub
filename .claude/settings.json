@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git add . && git commit -m \"auto: update\" && git push || true",
+            "statusMessage": "Committing & pushing changes..."
+          }
+        ]
+      }
+    ]
+  }
+}
